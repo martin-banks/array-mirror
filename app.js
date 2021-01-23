@@ -23,49 +23,46 @@ const source = [
 //   28,29,30,31,32,33,34,35,36,37,38,39,40,41
 // ]
 
-const leftSide = source.filter((s, i) => {
-  const coords = [(i) % ratio[0], Math.floor(i / ratio[0])]
-  return coords[0] < Math.ceil(ratio[0] / 2)
-})
 
+const leftSide = []
+const rightSide = []
+
+const leftSideRows = []
+const rightSideRows = []
+
+const leftSideMirror = []
+const rightSideMirror = []
+
+// In preparation for use on larger datasets, for loops are more performant
+for (let i = 0; i < source.length; i ++) {
+  const coords = [(i) % ratio[0], Math.floor(i / ratio[0])]
+  if (coords[0] < Math.ceil(ratio[0] / 2)) {
+    leftSide.push(source[i])
+  } else {
+    rightSide.push(source[i])
+  }
+}
 
 // ? Creating 2d arrrays from raw 'side' data
-const leftSideRows = []
 for (let row = 0; row < ratio[1]; row++) {
   const rowStart = row * Math.ceil(ratio[0] / 2)
-  const rowData = leftSide.slice(rowStart, rowStart + Math.ceil(ratio[0] / 2))
-  leftSideRows.push(rowData)
+
+  const leftRowData = leftSide.slice(rowStart, rowStart + Math.ceil(ratio[0] / 2))
+  leftSideRows.push(leftRowData)
+
+  const roghtRrowData = rightSide.slice(rowStart, rowStart + Math.ceil(ratio[0] / 2))
+  rightSideRows.push(roghtRrowData)
 }
 
-const leftSideMirror = leftSideRows
-  .reduce((output, r) => {
-    const update = output
-    update.push(...r.slice(1, r.length).reverse())
-    update.push(...r)
-    return update
-  }, [])
+for (let i = 0; i < ratio[1]; i++) {
+  const leftRow = leftSideRows[i]
+  leftSideMirror.push(...leftRow)
+  leftSideMirror.push(...leftRow.slice(0, leftRow.length -1).reverse())
 
-
-
-const rightSide = source.filter((s, i) => {
-  const coords = [(i) % ratio[0], Math.floor(i / ratio[0])]
-  return coords[0] >= Math.floor(ratio[0] / 2)
-})
-
-const rightSideRows = []
-for (let row = 0; row < ratio[1]; row++) {
-  const rowStart = row * Math.ceil(ratio[0] / 2)
-  const rowData = rightSide.slice(rowStart, rowStart + Math.ceil(ratio[0] / 2))
-  rightSideRows.push(rowData)
+  const rightRow = rightSideRows[i]
+  rightSideMirror.push(...rightRow.slice(1, rightRow.length).reverse())
+  rightSideMirror.push(...rightRow)
 }
-
-const rightSideMirror = rightSideRows
-  .reduce((output, r) => {
-    const update = output
-    update.push(...r.slice(1, r.length).reverse())
-    update.push(...r)
-    return update
-  }, [])
 
 
 
