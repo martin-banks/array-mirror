@@ -48,7 +48,6 @@ const leftSide = source.filter((s, i) => {
 //   30,31,32,33,34,
 // ]
 
-
 // ? Creating 2d arrrays from raw 'side' data
 const leftSideRows = []
 for (let row = 0; row < ratio[1]; row++) {
@@ -58,6 +57,19 @@ for (let row = 0; row < ratio[1]; row++) {
 }
 
 
+
+const rightSide = source.filter((s, i) => {
+  const coords = [(i) % ratio[0], Math.floor(i / ratio[0])]
+  return coords[0] >= (ratio[0] / 2)
+})
+// ! Expected outcome
+// [
+  // 5, 6, 7, 8, 9,
+  // 15,16,17,18,19,
+  // 25,26,27,28,29,
+  // 35,36,37,38,39,
+// ]
+
 const rightSideRows = []
 for (let row = 0; row < ratio[1]; row++) {
   const rowStart = row * (ratio[0] / 2)
@@ -66,24 +78,13 @@ for (let row = 0; row < ratio[1]; row++) {
 }
 
 
-console.log({ leftSideRows })
 
-
-
-
-
-const rightSide = source.filter((s, i) => {
-  const coords = [(i) % ratio[0], Math.floor(i / ratio[0])]
-  return coords[0] >= (ratio[0] / 2)
+// Dump the results
+console.log({
+  leftSide,
+  rightSide,
+  leftSideRows,
+  rightSideRows,
 })
-// ! Expected outcome
-// [
-// 5, 6, 7, 8, 9,
-// 15,16,17,18,19,
-// 25,26,27,28,29,
-// 35,36,37,38,39,
-// ]
-
-console.log({ leftSide, rightSide })
 
 
