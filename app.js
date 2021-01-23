@@ -1,20 +1,20 @@
 // Data samples
-// const ratio = [7, 5]
-// const source = [
-//   0, 1, 2, 3, 4, 5, 6,
-//   7, 8, 9, 10,11,12,13,
-//   14,15,16,17,18,19,20,
-//   21,22,23,24,25,26,27,
-//   28,29,30,31,32,33,34,
-// ]
-
-const ratio = [10, 4]
+const ratio = [7, 5]
 const source = [
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-  10,11,12,13,14,15,16,17,18,19,
-  20,21,22,23,24,25,26,27,28,29,
-  30,31,32,33,34,35,36,37,38,39,
+  0, 1, 2, 3, 4, 5, 6,
+  7, 8, 9, 10,11,12,13,
+  14,15,16,17,18,19,20,
+  21,22,23,24,25,26,27,
+  28,29,30,31,32,33,34,
 ]
+
+// const ratio = [10, 4]
+// const source = [
+//   0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+//   10,11,12,13,14,15,16,17,18,19,
+//   20,21,22,23,24,25,26,27,28,29,
+//   30,31,32,33,34,35,36,37,38,39,
+// ]
 
 // const ratio = [14, 3]
 // const source = [
@@ -24,61 +24,54 @@ const source = [
 // ]
 
 
-const leftSide = []
-const rightSide = []
-
-const leftSideRows = []
-const rightSideRows = []
 
 const leftSideMirror = []
 const rightSideMirror = []
 
-// In preparation for use on larger datasets, for loops are more performant
-for (let i = 0; i < source.length; i ++) {
-  const coords = [(i) % ratio[0], Math.floor(i / ratio[0])]
-  if (coords[0] < Math.ceil(ratio[0] / 2)) {
-    leftSide.push(source[i])
-  } else {
-    rightSide.push(source[i])
-  }
-}
+const halfRowLeft = Math.ceil(ratio[0] / 2)
+const halfRowRight = Math.floor(ratio[0] / 2)
 
-// ? Creating 2d arrrays from raw 'side' data
+// We know that the data represents rows and columns and how many there are of each
+// Performing a loop over the number of rows, we can split the data into each row.
+// These can in turn be split in half for the left and right respectively
+// Now we have each half, they can be duplicated, reversed and combined with the original
+// This resulting data is then pushed (with spread) into the output array
 for (let row = 0; row < ratio[1]; row++) {
-  const rowStart = row * Math.ceil(ratio[0] / 2)
+  // Determine the row we are operation
+  const rowStart = row * ratio[0]
 
-  const leftRowData = leftSide.slice(rowStart, rowStart + Math.ceil(ratio[0] / 2))
-  leftSideRows.push(leftRowData)
+  // The left side data is the first half
+  const leftDataSet = source.slice(
+    rowStart,
+    rowStart + halfRowLeft
+  )
+  // Right side is the second
+  const rightDataSet = source.slice(
+    rowStart + halfRowRight,
+    rowStart + ratio[0]
+  )
 
-  const roghtRrowData = rightSide.slice(rowStart, rowStart + Math.ceil(ratio[0] / 2))
-  rightSideRows.push(roghtRrowData)
-}
+  // Using spread operators and slice means we are not contaminating the original data
+  // And will let ups push each value into the output arrays, this is more efficient than another loop
+  leftSideMirror.push(...leftDataSet)
+  leftSideMirror.push(...leftDataSet.slice(0, leftDataSet.length -1).reverse())
 
-for (let i = 0; i < ratio[1]; i++) {
-  const leftRow = leftSideRows[i]
-  leftSideMirror.push(...leftRow)
-  leftSideMirror.push(...leftRow.slice(0, leftRow.length -1).reverse())
+  rightSideMirror.push(...rightDataSet.slice(1, rightDataSet.length).reverse())
+  rightSideMirror.push(...rightDataSet)
 
-  const rightRow = rightSideRows[i]
-  rightSideMirror.push(...rightRow.slice(1, rightRow.length).reverse())
-  rightSideMirror.push(...rightRow)
+  // Helps us to manually check we are serating the data correctly
+  console.log({ leftDataSet, rightDataSet })
 }
 
 
 
 // Print the results
 console.log(
-  {
-    leftSide,
-    leftSideRows,
-    leftSideMirror,
-  },
-    '\n-------------------\n',
-  {
-    rightSide,
-    rightSideRows,
-    rightSideMirror
-  }
+  '\n-------------------\n',
+  { leftSideMirror },
+  '\n-------------------\n',
+  { rightSideMirror },
+  '\n-------------------\n',
 )
 
 
