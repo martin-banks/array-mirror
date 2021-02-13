@@ -1,6 +1,6 @@
 # 2D Array Mirror
 
-This is a sandbox/challenge project in preparation for future project.
+This is a sandbox/challenge project in preparation for the [Camera Mirror](https://github.com/martin-banks/image-symetrifier) project where this is used to create symetrical images from a live webcam feed.
 
 
 ## The challenge
@@ -67,18 +67,16 @@ const rightSideMirror = [
 
 To get column index for 0 based range
 
-(i + 1) % ColumnCount
+`(i + 1) % ColumnCount`
 
-(i + 1) % ratio[0]
+`(i + 1) % ratio[0]`
 
 
-To get the row index
+To get the row index, divide the index by the column count and round down
 
-Divide the index by the column count and round down
+`Math.floor(i / ratio[0])`
 
-Math.floor(i / ratio[0])
-
-matrix coords = [(i + 1) % ratio[0], Math.floor(i / ratio[0])]
+`matrix coords = [(i + 1) % ratio[0], Math.floor(i / ratio[0])]`
 
 
 
@@ -86,9 +84,9 @@ matrix coords = [(i + 1) % ratio[0], Math.floor(i / ratio[0])]
 
 In order to get a consistant mirror from the vertical centeral axis of the matrix
 
-Left side; combines the original followed by the mirror
+**Left side**; combines the original followed by the mirror
 
-Right side; combines the mirrored with the original
+**Right side**; combines the mirrored with the original
 
 
 
@@ -108,17 +106,15 @@ Each side is the same length
 
 In order to get the central pixel, both sides must include the central node
 
-For left side; Divide row length and round up
+**For left side**; Divide row length and round up `Math.ceil(ratio[0] / 2)`
 
-Math.ceil(ratio[0] / 2)
+**For right side**; Divide row length and round down `Math.floor(ratio[0] / 2)`
 
-For right side; Divide row length and round down
-
-Math.floor(ratio[0] / 2)
 
 
 
 ### Preventing central pixel duplicates
+
 One of the row sets need to exclude the node in the center of the grid
 
 For consistancy, the original data set is preserveed; the mirrored will exclude the center
